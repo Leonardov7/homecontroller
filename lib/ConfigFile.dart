@@ -8,6 +8,15 @@ class ConfigFileApp extends State<ConfigFile> {
   TextEditingController ip = TextEditingController();
   TextEditingController gate = TextEditingController();
   TextEditingController subnet = TextEditingController();
+  String dropdownvalue = 'Zona 1';
+
+  // List of items in our dropdown menu
+  var items = [
+    'Zona 1',
+    'Zona 2',
+    'Zona 3',
+    'Zona 4',
+  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,7 +52,33 @@ class ConfigFileApp extends State<ConfigFile> {
                                   color: Colors.black45, fontSize: 12)),
                         ),
                         Padding(
-                          padding: EdgeInsets.only(top: 5, right: 5, left: 10),
+                          padding: EdgeInsets.only(bottom: 1,left: 10),
+                          child: DropdownButton(
+
+                            value: dropdownvalue,
+                            icon: const Icon(Icons.keyboard_arrow_down),
+                            items: items.map((String items) {
+                              return DropdownMenuItem(
+                                value: items,
+                                child: Text(items),
+                              );
+                            }).toList(),
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                dropdownvalue = newValue!;
+                              });
+                            },
+                            style: TextStyle(  //te
+                                color: Colors.black, //Font color
+                                fontSize: 12 //font size on dropdown button
+                            ),
+                            //dropdownColor: Colors.redAccent, //dropdown background color
+                           // underline: Container(), //remove underline
+                            isExpanded: true, //make true to make width 100%
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(top: 1, right: 5, left: 10),
                           child: TextField(
                             controller: ip,
                             style:
@@ -93,13 +128,13 @@ class ConfigFileApp extends State<ConfigFile> {
                         color: Color(0xFFFFFFFFFF),
                         border: Border(
                           //top: BorderSide(
-                             // width: 1.0, color: Color(0xFFFF000000)),
+                          // width: 1.0, color: Color(0xFFFF000000)),
                           left: BorderSide(
                               width: 1.0, color: Color(0xFFFF000000)),
-                         // right: BorderSide(
-                              //width: 1.0, color: Color(0xFFFF000000)),
+                          // right: BorderSide(
+                          //width: 1.0, color: Color(0xFFFF000000)),
                           //bottom: BorderSide(
-                            //  width: 1.0, color: Color(0xFFFF000000)),
+                          //  width: 1.0, color: Color(0xFFFF000000)),
                         ),
                       ),
                       child: Center(

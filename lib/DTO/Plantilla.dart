@@ -11,7 +11,11 @@ class PlantillaApp extends State<Plantilla>{
         title: Text('template'),
 
       ),
-      body: SingleChildScrollView(),
+      body: SingleChildScrollView(
+        child: Container(
+          color:Colors.blue
+        ),
+      ),
     );
   }
 }
