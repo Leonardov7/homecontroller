@@ -5,8 +5,8 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 class WebSocket extends StatefulWidget {
   final String zona;
   final String ip;
-  WebSocket(this.zona,this.ip);
-    @override
+  WebSocket(this.zona, this.ip);
+  @override
   WebSocketApp createState() => WebSocketApp();
 }
 
@@ -14,6 +14,7 @@ class WebSocketApp extends State<WebSocket> {
   bool ledstatus = false; //boolean value to track LED status, if its ON or OFF
   // late IOWebSocketChannel channel;
   late WebSocketChannel channel;
+  late WebSocketChannel channel_1;
   bool connected = false; //boolean value to track if WebSocket is connected
   bool ledstatus_1 = false;
   bool ledstatus_3 = false;
@@ -23,6 +24,8 @@ class WebSocketApp extends State<WebSocket> {
   bool ledstatus_7 = false;
   bool ledstatus_8 = false; //initially leadstatus is off so its FALSE
   // bool connected_1 = false; //initially connection status is "NO" so its FALSE
+  String message_ = '';
+MaterialStatesController boton1=MaterialStatesController();
   @override
   void initState() {
     ledstatus = false; //initially leadstatus is off so its FALSE
@@ -55,14 +58,18 @@ class WebSocketApp extends State<WebSocket> {
       channel.stream.listen(
         (message) {
           print(message);
+          message_ = message.toString();
           setState(() {
             if (message == "connected...") {
               connected = true; //message is "connected" from NodeMCU
-            } else if (message == "poweron:success...") {
+            } else if (message == "poweron:Channel-1") {
               ledstatus = true;
+              print(message + '...Mensaje desde MCU');
+              print('Encendido');
               //ledstatus_1 = true;
               //ledstatus_3 = true;
-            } else if (message == "poweroff:success") {
+            } else if (message == "poweroff:Channel-1") {
+              print('Apagado --- poweroff:Channel-1');
               ledstatus = false;
               //ledstatus_1 = false;
             }
@@ -87,9 +94,14 @@ class WebSocketApp extends State<WebSocket> {
   Future<void> sendcmd(String cmd, int zona) async {
     // print(cmd+"***");
     if (connected == true) {
-      if (ledstatus == false && cmd != "poweron" && cmd != "poweroff") {
+      if (ledstatus == false && cmd != "poweron" && cmd != "poweroff" && cmd != "state") {
         print("Send the valid command");
-      } else {
+      }
+      else if(cmd=='state'){
+        channel.sink.add(zona.toString() + cmd);
+        print('Preguntando estado----');
+      }
+      else {
         //print(zona.toString() + cmd);
         channel.sink.add(zona.toString() + cmd); //sending Command to NodeMCU
       }
@@ -119,7 +131,7 @@ class WebSocketApp extends State<WebSocket> {
       ),*/
       body: SingleChildScrollView(
         child: Container(
-          height: 650,
+          //height: 650,
           decoration: BoxDecoration(
             image: DecorationImage(
               image: AssetImage("img/Circuit_2.png"),
@@ -136,24 +148,28 @@ class WebSocketApp extends State<WebSocket> {
                     child: Column(
                       children: [
                         Padding(
-                            padding: EdgeInsets.only(top: 12, bottom: 10),
-                            child: connected
-                                ? Text("WEBSOCKET: CONNECTED",
-                                    style: TextStyle(
-                                        color: Colors.green, fontSize: 15))
-                                : Text(
-                                    "WEBSOCKET: DISCONNECTED",
-                                    style: TextStyle(
-                                        color: Colors.red, fontSize: 15),
-                                  ),),
+                          padding: EdgeInsets.only(top: 12, bottom: 10),
+                          child: connected
+                              ? Text("WEBSOCKET: CONNECTED",
+                                  style: TextStyle(
+                                      color: Colors.green, fontSize: 15))
+                              : Text(
+                                  "WEBSOCKET: DISCONNECTED",
+                                  style: TextStyle(
+                                      color: Colors.red, fontSize: 15),
+                                ),
+                        ),
                         /* Padding(
                             padding: EdgeInsets.only(top: 5, bottom: 20),
                             child: ledstatus
                                 ? Text("LED IS: ON")
                                 : Text("LED IS: OFF"))*/
-                        Padding(padding: EdgeInsets.only(top: 2,bottom: 5),
-                        child: Text('ZONA ' +widget.zona,style: TextStyle(
-                            color: Colors.red, fontSize: 20),),
+                        Padding(
+                          padding: EdgeInsets.only(top: 2, bottom: 5),
+                          child: Text(
+                            'ZONA ' + widget.zona,
+                            style: TextStyle(color: Colors.red, fontSize: 20),
+                          ),
                         ),
                       ],
                     ),
@@ -166,12 +182,16 @@ class WebSocketApp extends State<WebSocket> {
                     child: Padding(
                       padding: EdgeInsets.only(top: 1, right: 5),
                       child: ElevatedButton(
+                        statesController: boton1,
+
                         style: ElevatedButton.styleFrom(
                             backgroundColor: ledstatus
                                 ? Colors.green.withOpacity(0.8)
                                 : Color(0xFFFF57ACFF).withOpacity(0.5),
                             minimumSize: Size(1, 150)),
                         onPressed: () {
+
+                          //  print('Mensaje...' + message_);
                           {
                             if (ledstatus) {
                               sendcmd("poweroff", 1);
@@ -209,7 +229,7 @@ class WebSocketApp extends State<WebSocket> {
                         onPressed: () {
                           {
                             if (ledstatus_1) {
-                              sendcmd("poweroff", 2);//comando, zona
+                              sendcmd("poweroff", 2); //comando, zona
                               ledstatus_1 = false;
                             } else {
                               sendcmd("poweron", 2);
@@ -220,15 +240,15 @@ class WebSocketApp extends State<WebSocket> {
                         },
                         child: ledstatus_1
                             ? Text("CANAL-2 \n ON ",
-                            style: TextStyle(
-                                color: Colors.black, fontSize: 20),
-                            textAlign: (TextAlign.center))
+                                style: TextStyle(
+                                    color: Colors.black, fontSize: 20),
+                                textAlign: (TextAlign.center))
                             : Text(
-                          "CANAL-2 \n OFF ",
-                          style: TextStyle(
-                              color: Colors.black, fontSize: 20),
-                          textAlign: (TextAlign.center),
-                        ),
+                                "CANAL-2 \n OFF ",
+                                style: TextStyle(
+                                    color: Colors.black, fontSize: 20),
+                                textAlign: (TextAlign.center),
+                              ),
                       ),
                     ),
                   ),
@@ -249,10 +269,10 @@ class WebSocketApp extends State<WebSocket> {
                         onPressed: () {
                           {
                             if (ledstatus_3) {
-                              sendcmd("poweroff", 1);
+                              sendcmd("poweroff", 3);
                               ledstatus_3 = false;
                             } else {
-                              sendcmd("poweron", 1);
+                              sendcmd("poweron", 3);
                               ledstatus_3 = true;
                             }
                             setState(() {});
@@ -260,15 +280,15 @@ class WebSocketApp extends State<WebSocket> {
                         },
                         child: ledstatus_3
                             ? Text("CANAL-3 \n ON ",
-                            style: TextStyle(
-                                color: Colors.black, fontSize: 20),
-                            textAlign: (TextAlign.center))
+                                style: TextStyle(
+                                    color: Colors.black, fontSize: 20),
+                                textAlign: (TextAlign.center))
                             : Text(
-                          "CANAL-3 \n OFF ",
-                          style: TextStyle(
-                              color: Colors.black, fontSize: 20),
-                          textAlign: (TextAlign.center),
-                        ),
+                                "CANAL-3 \n OFF ",
+                                style: TextStyle(
+                                    color: Colors.black, fontSize: 20),
+                                textAlign: (TextAlign.center),
+                              ),
                       ),
                     ),
                   ),
@@ -284,10 +304,10 @@ class WebSocketApp extends State<WebSocket> {
                         onPressed: () {
                           {
                             if (ledstatus_4) {
-                              sendcmd("poweroff", 1);
+                              sendcmd("poweroff", 4);
                               ledstatus_4 = false;
                             } else {
-                              sendcmd("poweron", 1);
+                              sendcmd("poweron", 4);
                               ledstatus_4 = true;
                             }
                             setState(() {});
@@ -295,15 +315,15 @@ class WebSocketApp extends State<WebSocket> {
                         },
                         child: ledstatus_4
                             ? Text("CANAL-4 \n ON ",
-                            style: TextStyle(
-                                color: Colors.black, fontSize: 20),
-                            textAlign: (TextAlign.center))
+                                style: TextStyle(
+                                    color: Colors.black, fontSize: 20),
+                                textAlign: (TextAlign.center))
                             : Text(
-                          "CANAL-4 \n OFF ",
-                          style: TextStyle(
-                              color: Colors.black, fontSize: 20),
-                          textAlign: (TextAlign.center),
-                        ),
+                                "CANAL-4 \n OFF ",
+                                style: TextStyle(
+                                    color: Colors.black, fontSize: 20),
+                                textAlign: (TextAlign.center),
+                              ),
                       ),
                     ),
                   ),
@@ -323,10 +343,10 @@ class WebSocketApp extends State<WebSocket> {
                         onPressed: () {
                           {
                             if (ledstatus_5) {
-                              sendcmd("poweroff", 1);
+                              sendcmd("poweroff", 5);
                               ledstatus_5 = false;
                             } else {
-                              sendcmd("poweron", 1);
+                              sendcmd("poweron", 5);
                               ledstatus_5 = true;
                             }
                             setState(() {});
@@ -334,15 +354,15 @@ class WebSocketApp extends State<WebSocket> {
                         },
                         child: ledstatus_5
                             ? Text("CANAL-5 \n ON ",
-                            style: TextStyle(
-                                color: Colors.black, fontSize: 20),
-                            textAlign: (TextAlign.center))
+                                style: TextStyle(
+                                    color: Colors.black, fontSize: 20),
+                                textAlign: (TextAlign.center))
                             : Text(
-                          "CANAL-5 \n OFF ",
-                          style: TextStyle(
-                              color: Colors.black, fontSize: 20),
-                          textAlign: (TextAlign.center),
-                        ),
+                                "CANAL-5 \n OFF ",
+                                style: TextStyle(
+                                    color: Colors.black, fontSize: 20),
+                                textAlign: (TextAlign.center),
+                              ),
                       ),
                     ),
                   ),
@@ -358,30 +378,69 @@ class WebSocketApp extends State<WebSocket> {
                         onPressed: () {
                           {
                             if (ledstatus_6) {
-                              sendcmd("poweroff", 1);
+                              sendcmd("poweroff", 6);
                               ledstatus_6 = false;
                             } else {
-                              sendcmd("poweron", 1);
-                              ledstatus_6= true;
+                              sendcmd("poweron", 6);
+                              ledstatus_6 = true;
                             }
                             setState(() {});
                           }
                         },
                         child: ledstatus_6
                             ? Text("CANAL-6 \n ON ",
-                            style: TextStyle(
-                                color: Colors.black, fontSize: 20),
-                            textAlign: (TextAlign.center))
+                                style: TextStyle(
+                                    color: Colors.black, fontSize: 20),
+                                textAlign: (TextAlign.center))
                             : Text(
-                          "CANAL-6 \n OFF ",
-                          style: TextStyle(
-                              color: Colors.black, fontSize: 20),
-                          textAlign: (TextAlign.center),
-                        ),
+                                "CANAL-6 \n OFF ",
+                                style: TextStyle(
+                                    color: Colors.black, fontSize: 20),
+                                textAlign: (TextAlign.center),
+                              ),
                       ),
                     ),
                   ),
                 ],
+              ),
+              Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(top: 8),
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor:
+                                Color(0xFFFF372EF0).withOpacity(0.5),
+                            alignment: Alignment.centerLeft),
+                        onPressed: () {
+                          /*Navigator.of(context).pop();*/
+                          Navigator.popAndPushNamed(context, '/currentRoute');
+                        },
+                        child: Icon(Icons.exit_to_app,
+                            size: 50, color: Colors.white),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 8),
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor:
+                                Color(0xFFFF372EF0).withOpacity(0.5),
+                            alignment: Alignment.centerLeft),
+                        onPressed: () {
+                          /*Navigator.of(context).pop();*/
+                         // channelconnect();
+                          sendcmd('state', 0);
+                          print(message_+" ****");
+                        },
+                        child: Icon(Icons.real_estate_agent,
+                            size: 50, color: Colors.white),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
