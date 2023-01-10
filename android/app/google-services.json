@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "240604459905",
+    "project_id": "homeremote-a209a",
+    "storage_bucket": "homeremote-a209a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:240604459905:android:09b82ae1a729556ff76e80",
+        "android_client_info": {
+          "package_name": "com.example.homecontroller"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "240604459905-rlvh3oqt6kuft81epdfevtd57vgbbvjd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAAGUEoL3ETyrJIwq9WJj1d0r6BJazLn0M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "240604459905-rlvh3oqt6kuft81epdfevtd57vgbbvjd.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "240604459905-cq3fqf2u977h0vrmmhipfkgklq7dadca.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.homecontroler"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

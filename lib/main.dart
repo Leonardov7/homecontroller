@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:homecontroller/HomeControl.dart';
-import 'Light/WebSocket.dart';
-import 'HomeControl.dart';
+import 'package:cloud_firestore/cloud_firestore.dart ';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-void main() {
-  // WidgetsFlutterBinding.ensureInitialized();
-  // await Firebase.initializeApp(
-  //  options: DefaultFirebaseOptions.currentPlatform,
-  // );
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(MyApp());
 }
 
@@ -24,19 +25,26 @@ class Home extends StatefulWidget {
 }
 
 class HomeStart extends State<Home> {
+
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
     return MaterialApp(
       title: 'Remote control app',
       home: Scaffold(
         body: SingleChildScrollView(
           child: Container(
-            //height: 800,
+            //height: screenHeight * 0.5,//pantalla al 50%
+            height: MediaQuery.of(context).size.height,// pantalla al 100%
+            width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
-              image: DecorationImage(
+             image: DecorationImage(
                 image: AssetImage("img/back_2.png"),
-                opacity: 0.95,
-                fit: BoxFit.fitHeight,
-              ),
+              opacity: 0.95,
+                fit: BoxFit.cover,
+
+             ),
+            //  color: Colors.white70
             ),
             child: Center(
               child: Column(
@@ -49,9 +57,16 @@ class HomeStart extends State<Home> {
                         // color: Colors.white.withOpacity(0.7),
                         ),
                     alignment: Alignment.center,
-                    width: 200,
-                    height: 250,
-                    child: Image.asset('img/User_3.png'),
+                   // width: 200,
+                   height: screenHeight * 0.3,//pantalla al 30%,
+                   //width: screenWidth * 0.7,
+                    child: Padding(
+                      padding: EdgeInsets.all(8),
+                      child: Image.asset(
+                        'img/User_3.png',
+                        width: double.infinity,
+                      ),
+                    ),
                   ),
                   Padding(
                     padding: EdgeInsets.only(top: 10),
@@ -122,7 +137,7 @@ class HomeStart extends State<Home> {
                     child: TextButton(
                       onPressed: () {
                         //Navigator.push(context,
-                           // MaterialPageRoute(builder: (_) => HomeControl()));
+                        // MaterialPageRoute(builder: (_) => HomeControl()));
                       },
                       child: Text(
                         'Olvidé mi contraseña',
@@ -131,51 +146,56 @@ class HomeStart extends State<Home> {
                     ),
                   ),
                   Container(
-                    margin: EdgeInsets.only(top: 5,bottom: 60),
-                 child: Row(
-                    children: [
-
-                      Expanded(
-                        child: Padding(
-                          padding: EdgeInsets.only(top: 5,bottom:5),
-                          child: IconButton(
-                            onPressed: () {},
-                            icon: Icon(
-                              Icons.g_mobiledata,
-                              color: Colors.white,
+                    margin: EdgeInsets.only(top: 5, bottom: 60),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Padding(
+                            padding: EdgeInsets.only(top: 5, bottom: 5),
+                            child: IconButton(
+                              onPressed: () {},
+                              icon: Icon(
+                                Icons.g_mobiledata,
+                                color: Colors.white,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      Expanded(
-                        child: Padding(
-                          padding: EdgeInsets.only(top: 5,bottom:5),
-                          child: IconButton(
-                            onPressed: () {},
-                            icon: Icon(
-                              Icons.facebook,
-                              color: Colors.white,
+                        Expanded(
+                          child: Padding(
+                            padding: EdgeInsets.only(top: 5, bottom: 5),
+                            child: IconButton(
+                              onPressed: () {},
+                              icon: Icon(
+                                Icons.facebook,
+                                color: Colors.white,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      Expanded(
-                        child: Padding(
-                          padding: EdgeInsets.only(top: 3,bottom:5,left: 50,right: 5),
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                alignment: Alignment.bottomCenter,
-                                backgroundColor: Color(0xFFFF57ACFF).withOpacity(0.5),
-                                minimumSize: Size(1, 70)),
-                            onPressed: () {},
-                            //child: Text('huella',textAlign: TextAlign.center,),
-                            child: Image.asset('img/Huella_1.png',height: 60,alignment: Alignment.center),
+                        Expanded(
+                          child: Padding(
+                            padding: EdgeInsets.only(
+                                top: 3, bottom: 5, left: 50, right: 5),
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  alignment: Alignment.bottomCenter,
+                                  backgroundColor:
+                                      Color(0xFFFF57ACFF).withOpacity(0.5),
+                                  minimumSize: Size(1, 70),
+                                  maximumSize: Size(1, 70)),
+                              onPressed: () {},
+                              //child: Text('huella',textAlign: TextAlign.center,),
+                              child: Padding(
+                                padding: EdgeInsets.all(8),
+                                child: Image.asset('img/Huella_1.png',
+                                    width: double.infinity , alignment: Alignment.center),
+                              ),
                             ),
                           ),
                         ),
-
-                    ],
-                  ),
+                      ],
+                    ),
                   ),
                 ],
               ),

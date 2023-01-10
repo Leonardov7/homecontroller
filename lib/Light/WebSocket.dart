@@ -25,7 +25,9 @@ class WebSocketApp extends State<WebSocket> {
   bool ledstatus_8 = false; //initially leadstatus is off so its FALSE
   // bool connected_1 = false; //initially connection status is "NO" so its FALSE
   String message_ = '';
-MaterialStatesController boton1=MaterialStatesController();
+  var colorBack = 0xFFFF57ACFF;
+  var flag = false;
+  MaterialStatesController boton1 = MaterialStatesController();
   @override
   void initState() {
     ledstatus = false; //initially leadstatus is off so its FALSE
@@ -55,6 +57,7 @@ MaterialStatesController boton1=MaterialStatesController();
 
       channel = WebSocketChannel.connect(Uri.parse(widget.ip));
       //print('2');
+
       channel.stream.listen(
         (message) {
           print(message);
@@ -64,13 +67,18 @@ MaterialStatesController boton1=MaterialStatesController();
               connected = true; //message is "connected" from NodeMCU
             } else if (message == "poweron:Channel-1") {
               ledstatus = true;
-              print(message + '...Mensaje desde MCU');
-              print('Encendido');
+              //  print(message + '...Mensaje desde MCU');
+              // print('Encendido');
               //ledstatus_1 = true;
               //ledstatus_3 = true;
             } else if (message == "poweroff:Channel-1") {
-              print('Apagado --- poweroff:Channel-1');
+              // print('Apagado --- poweroff:Channel-1');
               ledstatus = false;
+              //ledstatus_1 = false;
+            } else if (message == "0state") {
+              // print('Apagado --- poweroff:Channel-1');
+              //ledstatus = false;
+              print(message_ + "....++++0.....");
               //ledstatus_1 = false;
             }
           });
@@ -94,14 +102,19 @@ MaterialStatesController boton1=MaterialStatesController();
   Future<void> sendcmd(String cmd, int zona) async {
     // print(cmd+"***");
     if (connected == true) {
-      if (ledstatus == false && cmd != "poweron" && cmd != "poweroff" && cmd != "state") {
+      if (ledstatus == false &&
+          cmd != "poweron" &&
+          cmd != "poweroff" &&
+          cmd != "state" &&
+          cmd != "Temperature") {
         print("Send the valid command");
-      }
-      else if(cmd=='state'){
+      } else if (cmd == 'state') {
         channel.sink.add(zona.toString() + cmd);
         print('Preguntando estado----');
-      }
-      else {
+        print(message_ + " **--**");
+      } else if (cmd == 'Temperature') {
+        channel.sink.add(zona.toString() + cmd);
+      } else {
         //print(zona.toString() + cmd);
         channel.sink.add(zona.toString() + cmd); //sending Command to NodeMCU
       }
@@ -113,6 +126,13 @@ MaterialStatesController boton1=MaterialStatesController();
 
   @override
   Widget build(BuildContext context) {
+    setState(() {
+      while (!flag) {
+        sendcmd('state', 0);
+        print('object');
+        flag = true;
+      }
+    });
     return Scaffold(
       //  backgroundColor: Color(0xFFFF01350b),
       /*   appBar: AppBar(
@@ -183,14 +203,12 @@ MaterialStatesController boton1=MaterialStatesController();
                       padding: EdgeInsets.only(top: 1, right: 5),
                       child: ElevatedButton(
                         statesController: boton1,
-
                         style: ElevatedButton.styleFrom(
                             backgroundColor: ledstatus
                                 ? Colors.green.withOpacity(0.8)
-                                : Color(0xFFFF57ACFF).withOpacity(0.5),
+                                : Color(colorBack).withOpacity(0.5),
                             minimumSize: Size(1, 150)),
                         onPressed: () {
-
                           //  print('Mensaje...' + message_);
                           {
                             if (ledstatus) {
@@ -431,9 +449,26 @@ MaterialStatesController boton1=MaterialStatesController();
                             alignment: Alignment.centerLeft),
                         onPressed: () {
                           /*Navigator.of(context).pop();*/
-                         // channelconnect();
+                          // channelconnect();
                           sendcmd('state', 0);
-                          print(message_+" ****");
+                          print(message_ + " ****");
+                        },
+                        child: Icon(Icons.real_estate_agent,
+                            size: 50, color: Colors.white),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 8),
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor:
+                                Color(0xFFFF372EF0).withOpacity(0.5),
+                            alignment: Alignment.centerLeft),
+                        onPressed: () {
+                          /*Navigator.of(context).pop();*/
+                          // channelconnect();
+                          sendcmd('Temperature', 7);
+                          print(message_ + " Grados Centigrados-");
                         },
                         child: Icon(Icons.real_estate_agent,
                             size: 50, color: Colors.white),

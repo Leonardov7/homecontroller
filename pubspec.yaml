@@ -32,6 +32,8 @@ dependencies:
   flutter:
     sdk: flutter
   web_socket_channel:
+  firebase_core:
+  cloud_firestore:
 
 
   # The following adds the Cupertino Icons font to your application.

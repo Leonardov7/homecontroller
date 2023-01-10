@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:homecontroller/ConfigFile.dart';
-import 'package:homecontroller/DTO/Plantilla.dart';
+import 'package:homecontroller/Plantilla.dart';
 import 'package:homecontroller/Light/ZoneSelecction.dart';
+
+import 'Temperature/DashboardTemp.dart';
 
 class HomeControl extends StatefulWidget {
   HomeControlApp createState() => HomeControlApp();
@@ -10,6 +12,8 @@ class HomeControl extends StatefulWidget {
 class HomeControlApp extends State<HomeControl> {
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       /* appBar: AppBar(
         title: Text('CONTROL', textAlign: TextAlign.center),
@@ -24,7 +28,7 @@ class HomeControlApp extends State<HomeControl> {
               fit: BoxFit.fitHeight,
             ),
           ),
-       child: Column(
+          child: Column(
             children: [
               Container(
                 margin: EdgeInsets.only(top: 20),
@@ -68,8 +72,11 @@ class HomeControlApp extends State<HomeControl> {
                 children: [
                   Center(
                     child: Container(
-                      height: 250,
-                      child: Image.asset('img/Home.png'),
+                     margin: EdgeInsets.only(top: 5),
+                    //  height: 250,
+                       width: screenWidth * 0.9,
+                   height: screenHeight*  0.3,
+                         child: Image.asset('img/Home.png',width: double.infinity,),
                     ),
                   ),
                 ],
@@ -79,47 +86,64 @@ class HomeControlApp extends State<HomeControl> {
                 children: [
                   Expanded(
                     child: Padding(
-                      padding: EdgeInsets.only(bottom: 5, top: 10, left: 10),
+                      padding: EdgeInsets.only(bottom: 5, top: 1, left: 10),
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                             backgroundColor:
                                 Color(0xFFFF57ACFF).withOpacity(0.5),
-                            minimumSize: Size(400, 130)),
+                            maximumSize: Size(200, 120),
+                            minimumSize: Size(200, 120)),
                         onPressed: () {},
-                        child: Image.asset('img/Keys_1.png', width: 100),
+                        child: Padding(
+                            padding: EdgeInsets.all(8),
+                            child: Image.asset('img/Keys_1.png',
+                                width: double.infinity)),
                       ),
                     ),
                   ),
                   Expanded(
                     child: Padding(
                       padding: EdgeInsets.only(
-                          top: 10, bottom: 5, right: 5, left: 5),
+                          top: 1, bottom: 5, right: 5, left: 5),
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                             backgroundColor:
                                 Color(0xFFFF57ACFF).withOpacity(0.5),
-                            minimumSize: Size(400, 130)),
-                        onPressed: () {},
-                        child: Image.asset('img/Temp.png', width: 50),
+                            maximumSize: Size(200, 120),
+                            minimumSize: Size(200, 120)),
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (_) => DashboardTemp()));
+                        },
+                        child: Padding(
+                          padding: EdgeInsets.all(8),
+                          child: Image.asset(
+                            'img/Temp.png',
+                            width: double.infinity,
+                          ),
+                        ),
                       ),
                     ),
                   ),
                   Expanded(
                     child: Padding(
-                      padding: EdgeInsets.only(top: 10, right: 10, bottom: 5),
+                      padding: EdgeInsets.only(top: 1, right: 10, bottom: 5),
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                             backgroundColor:
                                 Color(0xFFFF57ACFF).withOpacity(0.5),
-                            minimumSize: Size(400, 130)),
+                            maximumSize: Size(200, 120),
+                            minimumSize: Size(200, 120)),
                         onPressed: () {
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (_) => ZoneSelecction()));
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (_) => ZoneSelecction()));
                         },
-                        child: Image.asset(
-                          'img/Luz_1.png',
-                          width: 150,
-                        ),
+                        child:Padding(padding: EdgeInsets.all(8),
+                            child: Image.asset('img/Luz_1.png', width: double.infinity,)),
                       ),
                     ),
                   ),
@@ -134,13 +158,14 @@ class HomeControlApp extends State<HomeControl> {
                         style: ElevatedButton.styleFrom(
                             backgroundColor:
                                 Color(0xFFFF57ACFF).withOpacity(0.5),
-                            minimumSize: Size(400, 130)),
+                            maximumSize: Size(200, 120),
+                            minimumSize: Size(200, 120)),
                         onPressed: () {
                           Navigator.push(context,
                               MaterialPageRoute(builder: (_) => Plantilla()));
-
                         },
-                        child: Text('Botón seis'),
+                        child:Padding(padding: EdgeInsets.all(8),
+                            child: Image.asset('img/Keys_1.png', width: double.infinity)),
                       ),
                     ),
                   ),
@@ -151,9 +176,11 @@ class HomeControlApp extends State<HomeControl> {
                         style: ElevatedButton.styleFrom(
                             backgroundColor:
                                 Color(0xFFFF57ACFF).withOpacity(0.5),
-                            minimumSize: Size(400, 130)),
+                            maximumSize: Size(200, 120),
+                            minimumSize: Size(200, 120)),
                         onPressed: () {},
-                        child: Text('Botón siete'),
+                        child:Padding(padding: EdgeInsets.all(8),
+                            child: Image.asset('img/Keys_1.png', width: double.infinity)),
                       ),
                     ),
                   ),
@@ -164,9 +191,13 @@ class HomeControlApp extends State<HomeControl> {
                         style: ElevatedButton.styleFrom(
                             backgroundColor:
                                 Color(0xFFFF57ACFF).withOpacity(0.5),
-                            minimumSize: Size(400, 130)),
+                            maximumSize: Size(200, 120),
+                            minimumSize: Size(200, 120)),
                         onPressed: () {},
-                        child: Text('Botón ocho'),
+                        child:Padding(padding: EdgeInsets.all(8),
+                            child: Image.asset('img/UserAdd_1.png', width: double.infinity),
+
+                          ),
                       ),
                     ),
                   ),
@@ -181,9 +212,11 @@ class HomeControlApp extends State<HomeControl> {
                         style: ElevatedButton.styleFrom(
                             backgroundColor:
                                 Color(0xFFFF57ACFF).withOpacity(0.5),
-                            minimumSize: Size(400, 130)),
+                            maximumSize: Size(200, 120),
+                            minimumSize: Size(200, 120)),
                         onPressed: () {},
-                        child: Image.asset('img/State_1.png', width: 150),
+                        child:Padding(padding: EdgeInsets.all(8),
+                            child: Image.asset('img/State_1.png', width: double.infinity)),
                       ),
                     ),
                   ),
@@ -195,12 +228,14 @@ class HomeControlApp extends State<HomeControl> {
                         style: ElevatedButton.styleFrom(
                             backgroundColor:
                                 Color(0xFFFF57ACFF).withOpacity(0.5),
-                            minimumSize: Size(400, 130)),
+                            maximumSize: Size(200, 120),
+                            minimumSize: Size(200, 120)),
                         onPressed: () {
                           Navigator.push(context,
                               MaterialPageRoute(builder: (_) => ConfigFile()));
                         },
-                        child: Image.asset('img/Settings_1.png', width: 150),
+                        child:Padding(padding: EdgeInsets.all(8),
+                            child: Image.asset('img/Settings_1.png', width: double.infinity)),
                       ),
                     ),
                   ),
@@ -211,9 +246,12 @@ class HomeControlApp extends State<HomeControl> {
                         style: ElevatedButton.styleFrom(
                             backgroundColor:
                                 Color(0xFFFF57ACFF).withOpacity(0.5),
-                            minimumSize: Size(400, 130)),
+                            //fixedSize: Size(420, 130),
+                            maximumSize: Size(200, 120),
+                            minimumSize: Size(200, 120)),
                         onPressed: () {},
-                        child: Image.asset('img/Ask_1.png', width: 70),
+                        child:Padding(padding: EdgeInsets.all(8),
+                            child: Image.asset('img/Ask_1.png', width: double.infinity)),
                       ),
                     ),
                   ),

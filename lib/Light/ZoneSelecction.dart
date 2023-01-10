@@ -15,11 +15,15 @@ class ZoneSelecctionApp extends State<ZoneSelecction> {
       ),
       body: SingleChildScrollView(
         child: Container(
-          height: 650,
+          //height: 650,
+          //height: double.infinity,
+          width: double.infinity,
+          margin: EdgeInsets.only(bottom: 100),
           decoration: BoxDecoration(
+
             image: DecorationImage(
               image: AssetImage("img/Back_1.png"),
-              fit: BoxFit.cover,
+              fit: BoxFit.fill,
             ),
           ),
 
@@ -36,7 +40,7 @@ class ZoneSelecctionApp extends State<ZoneSelecction> {
                   color: Colors.blue.withOpacity(0.1),
 
                   child: Container(
-                    width: 400,
+                    width: double.infinity,
                     height: 100,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -91,7 +95,7 @@ class ZoneSelecctionApp extends State<ZoneSelecction> {
                   color: Colors.blue.withOpacity(0.1),
 
                   child: Container(
-                    width: 400,
+                    width: double.infinity,
                     height: 100,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -146,7 +150,7 @@ class ZoneSelecctionApp extends State<ZoneSelecction> {
                   color: Colors.blue.withOpacity(0.1),
 
                   child: Container(
-                    width: 400,
+                    width: double.infinity,
                     height: 100,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -191,7 +195,7 @@ class ZoneSelecctionApp extends State<ZoneSelecction> {
                 ),
               ),
             Padding(
-                padding: EdgeInsets.only(top: 10, right: 5, left: 5),
+                padding: EdgeInsets.only(top: 10, right: 5, left: 5,bottom: 100),
                 child: MaterialButton(
 
                   padding: EdgeInsets.only(top: 1,right: 1,left: 1,bottom:1),
@@ -201,7 +205,7 @@ class ZoneSelecctionApp extends State<ZoneSelecction> {
                   color: Colors.blue.withOpacity(0.1),
 
                   child: Container(
-                    width: 400,
+                    width: double.infinity,
                     height: 100,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(10)),
